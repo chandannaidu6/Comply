@@ -1,0 +1,65 @@
+[project]
+name = "comply"
+version = "0.1.0"
+description = "AI-native compliance agent — regulatory-change monitoring, reasoning, and drafting with a policy-enforced, grounded harness."
+readme = "README.md"
+requires-python = ">=3.12"
+
+dependencies = [
+    # --- API + streaming ---
+    "fastapi>=0.115",
+    "uvicorn[standard]>=0.34",
+    "sse-starlette>=2.1",
+    # --- orchestration + durable checkpoints ---
+    # NOTE: langgraph-checkpoint-postgres setup drifts by version.
+    # Check its current README for the exact .setup() call before Day 4.
+    "langgraph>=0.2.60",
+    "langgraph-checkpoint-postgres>=2.0",
+    # --- model gateway (model-agnostic; price-shop per role) ---
+    "litellm>=1.55",
+    # --- persistence ---
+    "psycopg[binary]>=3.2",
+    "pgvector>=0.3",            # vectors unused in Week 1; wired in Week 2
+    "redis>=5.2",              # SSE pub/sub + job/lock backend
+    # --- typed config + args ---
+    "pydantic>=2.10",
+    "pydantic-settings>=2.7",
+    # --- tools ---
+    "httpx>=0.28",            # web_search, fetch_url
+    "docker>=7.1",            # python_exec local sandbox (Docker SDK)
+    # --- observability (OTel GenAI spans -> Langfuse over OTLP) ---
+    # NOTE: pick ONE GenAI instrumentation lib and follow its current README.
+    # openinference (below) or traceloop/openllmetry are both fine.
+    "langfuse>=2.57",
+    "opentelemetry-sdk>=1.29",
+    "opentelemetry-exporter-otlp>=1.29",
+    "openinference-instrumentation-langchain>=0.1.29",
+    # --- CLI ---
+    "typer>=0.15",
+    "beautifulsoup4>=4.15.0",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.3",
+    "pytest-asyncio>=0.25",
+    "ruff>=0.9",
+]
+
+# Treat this repo as an application, not an installable library.
+# Lets you use flat packages/ and apps/ dirs and run modules from the repo
+# root (e.g. `python -m apps.cli.run`) without a build backend.
+[tool.uv]
+package = false
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]   # errors, pyflakes, isort, pyupgrade, bugbear
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+pythonpath = ["."]
