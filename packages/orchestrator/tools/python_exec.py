@@ -9,7 +9,7 @@ IMAGE = "python:3.12-slim"
 TIMEOUT_SECONDS = 30
 MEM_LIMIT = "256m"
 CPUS = 1.0
-MAXS_CHARS = 8000
+MAX_CHARS = 8000
 
 ENABLED = os.getenv("SANDBOX_ENABLED","0") == "1"
 
@@ -87,7 +87,7 @@ class PythonExecs:
                     container.kill()
                     exit_code,timed_out = -1,True
 
-                logs = containers.logs(stdout=True,stderr=True).decode("utf-8",errors="replace")
+                logs = container.logs(stdout=True,stderr=True).decode("utf-8",errors="replace")
 
 
             except Exception as e:  

@@ -32,7 +32,7 @@ def safe_call(tool:Tool,raw_args:dict[str,Any])->ToolResult:
         args = tool.Args(**raw_args)
     except ValidationError as e:
         return ToolResult(
-            ok=False
+            ok=False,
             content=f"Invalid arguments for {tool.name}: {e.errors()}",
             meta={"stage": "validation", "tool": tool.name},
         )
