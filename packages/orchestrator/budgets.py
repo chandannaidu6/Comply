@@ -1,4 +1,8 @@
 from __future__ import annotations
+"This file essentially sets up the budget for the agent, so if and when an agent or a group of agents cross the final budget the"
+"The Operation will be exited with exhaused message. This is not an error this is just a message"
+"The Budget class contains"
+"steps,time,max_tokens,cost,number of workers"
 from typing import Any
 from dataclasses import dataclass, field
 import time
