@@ -29,7 +29,7 @@ class WebSearchArgs(BaseModel):
 def _format(results:list[dict],query:str)->str:
     lines : list[str] = []
     for i,r in enumerate(results,start=1):
-        title = (r.get("title" or "untitled")).strip()
+        title = (r.get("title") or ("untitled")).strip()
         url = (r.get("url" or "")).strip()
         snippet = (r.get("content") or r.get("snippet") or "").strip()
         if len(snippet) > MAX_SNIPPET_CHARS:
@@ -59,8 +59,8 @@ _STUB_RESULTS = [
         "across states. [STUB RESULT - not a real search]",
     },
 ]
-class Websearch:
-    name="web search"
+class WebSearch:
+    name="web_search"
     description = (
         "Search the web and return a numbered list of pages with titles, "
         "full URLs, and short snippets. Use this to find candidate sources, "
@@ -86,7 +86,7 @@ class Websearch:
         }
 
         try:
-            with httpx.client(timeout=TIMEOUT_SECONDS) as client:
+            with httpx.Client(timeout=TIMEOUT_SECONDS) as client:
                 response = client.post(TAVILY_URL,json=payload)
         except httpx.TimeoutException:
             return ToolResult(

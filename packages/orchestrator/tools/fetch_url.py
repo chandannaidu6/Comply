@@ -67,11 +67,12 @@ class FetchUrl:
                 meta={"url": args.url, "error": "request_error"},
             )
 
-        if response.status.code>= 400:
+        if response.status_code>= 400:
             return ToolResult(
                 ok=False,
-                content=f"Could not reach {args.url}: {e}",
-                meta={"url": args.url, "error": "request_error"},
+                content=(f"HTTP {response.status_code} fetching {args.url}. "
+                 "The page may have moved -- try a different URL."),
+                meta={"url": args.url, "status": response.status_code},
             )
 
         content_type = response.headers.get("content-type","")

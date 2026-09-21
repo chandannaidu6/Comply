@@ -62,7 +62,7 @@ class PythonExecs:
                 meta={"reason":"docker_unavailable"}
             )
 
-        with tempfile.TemporaryDiectory() as workdir:
+        with tempfile.TemporaryDirectory() as workdir:
             script = Path(workdir) / "main.py"
             script.write_text(args.code,encoding="utf-8")
             container = None
